@@ -2,6 +2,8 @@
 import Header from './components/Header/Header'
 import Viewer from './components/Viewer/Viewer'
 import Controller from './components/Controller/Controller'
+import Even from './components/Even'
+import Odd from './components/Odd'
 
 import { useRef,useState, useEffect } from 'react'
 
@@ -17,7 +19,8 @@ function App(){
   const handleChangeText = (e) =>{
     setText(e.target.value);
   };
-  
+  //Create didMountRef which allows to judge if App Component is mounted or not.
+  //By default, it's false.
   const didMountRef = useRef(false);
 
   useEffect(()=>{
@@ -28,6 +31,20 @@ function App(){
       console.log("Component Updated");
     }});
 
+  useEffect(()=>{
+    console.log("Component Mounted");
+  },[])
+
+  // every 1 second, * will appears in console.
+  useEffect(()=>{
+    const intervalID = setInterval(()=>{
+      console.log("*");
+    },1000);
+
+  return()=>{
+    console.log("Clean up");
+    clearInterval(intervalID);
+  };});
 
   return (
     <>
@@ -36,6 +53,7 @@ function App(){
         <input value={text} onChange={handleChangeText} />
       </section>
       <Viewer count={count} />
+      {count%2===0 && <Even /> || <Odd />}
       <Controller handleSetCount={handleSetCount}/>  
     </>
   );}
